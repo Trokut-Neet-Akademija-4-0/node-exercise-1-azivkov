@@ -41,7 +41,7 @@ class CartService {
       if (existingCartProduct) {
         if (existingCartProduct.quantity + quantityModifier > 0)
           existingCartProduct.quantity += quantityModifier
-        else this.deleteProductById(existingCartProduct.id)
+        else this.deleteProductById(product.id)
       } else if (quantityModifier > 0)
         this.cart.products.push(
           new CartProduct(
