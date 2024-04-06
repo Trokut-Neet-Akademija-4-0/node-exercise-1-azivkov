@@ -15,7 +15,7 @@ router.get('/add/:productId', (req: Request, res: Response) => {
 
 router.get('/remove/:productId', (req: Request, res: Response) => {
   res.send(
-    cartService.deleteProductById(Number.parseInt(req.params.productId, 10)),
+    cartService.removeProductById(Number.parseInt(req.params.productId, 10)),
   )
 })
 

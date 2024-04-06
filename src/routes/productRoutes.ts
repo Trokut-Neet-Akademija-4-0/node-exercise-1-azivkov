@@ -11,4 +11,8 @@ router.get('/:id', (req: Request, res: Response) => {
   res.send(productService.getProductById(Number.parseInt(req.params.id, 10)))
 })
 
+router.get('/remove/:id', (req: Request, res: Response) => {
+  res.send(productService.deleteProductById(Number.parseInt(req.params.id, 10)))
+})
+
 export default router

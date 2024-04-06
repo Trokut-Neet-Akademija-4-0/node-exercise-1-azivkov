@@ -15,6 +15,11 @@ class CartService {
     return this.cart
   }
 
+  removeProductById(id: number): ICart {
+    this.changeProductQuantity(id, -1)
+    return this.cart
+  }
+
   deleteProductById(id: number): ICart {
     const indexToDelete = this.getCartProductIndexByProductId(id)
 
