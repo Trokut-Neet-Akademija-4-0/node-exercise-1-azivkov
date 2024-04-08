@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes'
 import productRoutes from './routes/productRoutes'
 import cartRoutes from './routes/cartRoutes'
 import blogRoutes from './routes/blogRoutes'
+import ErrorHandler from './middlewares/ErrorHandler'
 
 const app: Express = express()
 const port = process.env.PORT || 3000
@@ -14,6 +15,7 @@ app.use('/users', userRoutes)
 app.use('/products', productRoutes)
 app.use('/cart', cartRoutes)
 app.use('/blog', blogRoutes)
+app.use(ErrorHandler)
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`)

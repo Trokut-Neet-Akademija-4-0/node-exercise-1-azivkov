@@ -1,22 +1,19 @@
-import express, { Request, Response } from 'express'
-import cartService from '../services/cartService'
+import express from 'express'
+import {
+  getCart,
+  addProductToCart,
+  removeProductFromCart,
+  clearCart,
+} from '../controllers/cartController'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response) => {
-  res.send(cartService.getCart())
-})
+router.get('/', getCart)
 
-router.get('/add/:productId', (req: Request, res: Response) => {
-  res.send(
-    cartService.addProductById(Number.parseInt(req.params.productId, 10)),
-  )
-})
+router.get('/add/:productId', addProductToCart)
 
-router.get('/remove/:productId', (req: Request, res: Response) => {
-  res.send(
-    cartService.removeProductById(Number.parseInt(req.params.productId, 10)),
-  )
-})
+router.get('/remove/:productId', removeProductFromCart)
+
+router.delete('/clear', clearCart)
 
 export default router

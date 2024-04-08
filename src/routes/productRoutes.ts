@@ -1,18 +1,16 @@
-import express, { Request, Response } from 'express'
-import productService from '../services/productService'
+import express from 'express'
+import {
+  getAllProducts,
+  getProductById,
+  deleteProductById,
+} from '../controllers/productController'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response) => {
-  res.send(productService.getAllProducts())
-})
+router.get('/', getAllProducts)
 
-router.get('/:id', (req: Request, res: Response) => {
-  res.send(productService.getProductById(Number.parseInt(req.params.id, 10)))
-})
+router.get('/:id', getProductById)
 
-router.get('/remove/:id', (req: Request, res: Response) => {
-  res.send(productService.deleteProductById(Number.parseInt(req.params.id, 10)))
-})
+router.get('/remove/:id', deleteProductById)
 
 export default router

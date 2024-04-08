@@ -1,14 +1,16 @@
-import express, { Request, Response } from 'express'
-import blogService from '../services/blogService'
+import express from 'express'
+import {
+  getAllBlogs,
+  getBlogById,
+  deleteBlogById,
+} from '../controllers/blogController'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response) => {
-  res.send(blogService.getAllBlogs())
-})
+router.get('/', getAllBlogs)
 
-router.get('/:id', (req: Request, res: Response) => {
-  res.send(blogService.getBlogById(Number.parseInt(req.params.id, 10)))
-})
+router.get('/:id', getBlogById)
+
+router.get('/remove/:id', deleteBlogById)
 
 export default router
