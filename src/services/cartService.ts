@@ -43,7 +43,7 @@ class CartService {
       const existingCartProduct = this.getCartProductByProductId(product.id)
       if (existingCartProduct.quantity + quantityModifier > 0)
         existingCartProduct.quantity += quantityModifier
-      else this.deleteProductById(existingCartProduct.id)
+      else this.deleteProductById(product.id)
     } catch (error) {
       if (error instanceof HttpError)
         this.cart.products.push(
