@@ -1,7 +1,7 @@
 import productService from './productService'
-import Cart from '../routes/models/cartModel'
-import ICart from '../routes/models/interfaces/cartInterface'
-import CartProduct from '../routes/models/cartProductModel'
+import Cart from '../models/cartModel'
+import ICart from '../models/interfaces/cartInterface'
+import CartProduct from '../models/cartProductModel'
 import HttpError from '../utils/HttpError'
 
 class CartService {
@@ -39,16 +39,13 @@ class CartService {
   changeProductQuantity(productId: number, quantityModifier: number): void {
     const product = productService.getProductById(productId)
 
-    if (product !== undefined) {
-      const existingCartProduct = this.cart.products.find(
-        (cartProduct) => cartProduct.product.id === product.id,
-      )
-
-      if (existingCartProduct) {
-        if (existingCartProduct.quantity + quantityModifier > 0)
-          existingCartProduct.quantity += quantityModifier
-        else this.deleteProductById(product.id)
-      } else if (quantityModifier > 0)
+    try {
+      const existingCartProduct = this.getCartProductByProductId(product.id)
+      if (existingCartProduct.quantity + quantityModifier > 0)
+        existingCartProduct.quantity += quantityModifier
+      else this.deleteProductById(existingCartProduct.id)
+    } catch (error) {
+      if (error instanceof HttpError)
         this.cart.products.push(
           new CartProduct(
             this.getNextAvailableCartProductId(),
@@ -59,16 +56,22 @@ class CartService {
     }
   }
 
-  getCartProductByProductId(id: number): CartProduct | undefined {
-    return this.cart.products.find(
-      (cartProducts) => cartProducts.product.id === id,
+  getCartProductByProductId(id: number): CartProduct {
+    const foundCartProduct = this.cart.products.find(
+      (cartProduct) => cartProduct.product.id === id,
     )
+    if (!foundCartProduct)
+      throw new HttpError(404, `Cart product with product id ${id} not found`)
+    return foundCartProduct
   }
 
   getCartProductIndexByProductId(id: number): number {
-    return this.cart.products.findIndex(
+    const cartProductIndex = this.cart.products.findIndex(
       (cartProduct) => cartProduct.product.id === id,
     )
+    if (cartProductIndex < 0)
+      throw new HttpError(404, `Cart product with product id ${id} not found`)
+    return cartProductIndex
   }
 
   getNextAvailableCartProductId(): number {

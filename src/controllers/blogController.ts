@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import blogService from '../services/blogService'
-import IBlog from '../routes/models/interfaces/blogInterface'
+import IBlog from '../models/interfaces/blogInterface'
 
 const getAllBlogs = (req: Request, res: Response) => {
   res.send(blogService.getAllBlogs())

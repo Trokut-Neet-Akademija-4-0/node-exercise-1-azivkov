@@ -1,5 +1,5 @@
-import IProduct from '../routes/models/interfaces/productInterface'
-import products from '../routes/models/productModel'
+import IProduct from '../models/interfaces/productInterface'
+import products from '../models/productModel'
 import HttpError from '../utils/HttpError'
 
 class ProductService {
@@ -9,14 +9,14 @@ class ProductService {
     return this.products
   }
 
-  getProductById(id: number): IProduct | undefined {
+  getProductById(id: number): IProduct {
     const foundProduct = this.products.find((product) => product.id === id)
     if (!foundProduct)
       throw new HttpError(404, `Product with id ${id} not found`)
     return foundProduct
   }
 
-  deleteProductById(id: number): IProduct | undefined {
+  deleteProductById(id: number): IProduct {
     const indexToDelete = this.products.findIndex(
       (product) => product.id === id,
     )

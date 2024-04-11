@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import productService from '../services/productService'
-import IProduct from '../routes/models/interfaces/productInterface'
+import IProduct from '../models/interfaces/productInterface'
 
 const getAllProducts = (req: Request, res: Response) => {
   res.send(productService.getAllProducts())

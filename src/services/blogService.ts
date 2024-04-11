@@ -1,5 +1,5 @@
-import IBlog from '../routes/models/interfaces/blogInterface'
-import blogs from '../routes/models/blogModel'
+import IBlog from '../models/interfaces/blogInterface'
+import blogs from '../models/blogModel'
 import HttpError from '../utils/HttpError'
 
 class BlogService {
