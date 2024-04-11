@@ -25,6 +25,11 @@ class BlogService {
     const deletedProduct = this.blogs.splice(indexToDelete, 1)
     return deletedProduct[0]
   }
+
+  addNewBlog(blog: IBlog): IBlog {
+    this.blogs.push(blog)
+    return blog
+  }
 }
 
 export default new BlogService()

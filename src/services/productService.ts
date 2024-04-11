@@ -27,6 +27,11 @@ class ProductService {
     const deletedProduct = this.products.splice(indexToDelete, 1)
     return deletedProduct[0]
   }
+
+  addNewProduct(product: IProduct): IProduct {
+    this.products.push(product)
+    return product
+  }
 }
 
 export default new ProductService()

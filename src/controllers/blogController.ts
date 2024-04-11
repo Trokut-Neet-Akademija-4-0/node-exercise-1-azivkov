@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import blogService from '../services/blogService'
+import IBlog from '../routes/models/interfaces/blogInterface'
 
 const getAllBlogs = (req: Request, res: Response) => {
   res.send(blogService.getAllBlogs())
@@ -13,4 +14,10 @@ const deleteBlogById = (req: Request, res: Response) => {
   res.send(blogService.deleteBlogById(Number.parseInt(req.params.id, 10)))
 }
 
-export { getAllBlogs, getBlogById, deleteBlogById }
+const createBlog = (req: Request, res: Response) => {
+  const newBlog = req.body as IBlog
+  console.log(req.body)
+  res.send(blogService.addNewBlog(newBlog))
+}
+
+export { getAllBlogs, getBlogById, deleteBlogById, createBlog }

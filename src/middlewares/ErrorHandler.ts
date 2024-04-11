@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import HttpError from '../utils/HttpError'
 
 //eslint-disable-next-line consistentreturn
-function ErrorHandler(
+function errorHandler(
   err: Error,
   req: Request,
   res: Response,
@@ -18,4 +18,4 @@ function ErrorHandler(
   res.status(statusCode).json({ error: message })
 }
 
-export default ErrorHandler
+export default errorHandler
