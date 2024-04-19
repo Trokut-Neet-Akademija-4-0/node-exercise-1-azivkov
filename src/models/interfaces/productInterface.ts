@@ -4,8 +4,7 @@ interface IProduct {
   price: number
   image: string
   description: string
-  cijena: string
-  kategorija: string
+  category: string
 }
 
 export default IProduct

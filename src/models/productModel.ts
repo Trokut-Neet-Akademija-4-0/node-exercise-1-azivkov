@@ -8,8 +8,7 @@ const products: IProduct[] = [
     image: 'https://i.imgur.com/0ehfIwO.jpg',
     description:
       'Upoznajte iPhone 15 u predivnoj plavoj boji s prostranim prostorom za pohranu od 128GB - savršen spoj elegantnog dizajna i visoke funkcionalnosti. Ovaj izuzetan pametni telefon donosi vrhunski doživljaj korisnika uz inovativne značajke poput naprednog sustava kamera, moćnog A15 Bionic čipa i poboljšane trajnosti. Uživajte u besprijekornoj izvedbi, brzoj pohrani podataka te vrhunskim mogućnostima snimanja i uređivanja fotografija i videozapisa. iPhone 15 Blue 128GB je sjajan odabir za one koji traže spoj vrhunske tehnologije i estetske privlačnosti. Osvježite svoj digitalni svijet s ovim impresivnim uređajem koji će zadovoljiti i najzahtjevnije korisnike.',
-    cijena: 'iznad500',
-    kategorija: 'mobiteli',
+    category: 'mobiteli',
   },
   {
     id: 2,
@@ -18,8 +17,7 @@ const products: IProduct[] = [
     image: 'https://i.imgur.com/om4R045.jpg',
     description:
       'Dobrodošli u vrhunski mobilni svijet s Samsung Galaxy S23 u elegantnoj crnoj boji i prostranim prostorom za pohranu od 256GB. Ovaj pametni telefon donosi vrhunske značajke, uključujući napredan sustav kamera, brz i moćan procesor te visokokapacitetnu pohranu za sve vaše potrebe. S23 Black kombinira sofisticiran dizajn s visokom funkcionalnošću, pružajući vrhunsko iskustvo korisnika. Uživajte u impresivnim performansama, poboljšanoj trajnosti te bogatom ekosustavu Samsungovih inovacija. S ovim uređajem, iskusite naprednu tehnologiju spojenu s elegantnim izgledom, savršenim za one koji traže vrhunsku mobilnu platformu. Samsung Galaxy S23 Black 256GB - Vaša budućnost u pametnom telefoniranju.',
-    cijena: 'iznad500',
-    kategorija: 'mobiteli',
+    category: 'mobiteli',
   },
   {
     id: 3,
@@ -28,8 +26,7 @@ const products: IProduct[] = [
     image: 'https://i.imgur.com/QioYljt.jpg',
     description:
       'Upoznajte ACER Aspire 7 - prijenosno računalo koje kombinira izvanredne performanse i elegantan dizajn.Opremljen moćnim procesorom i velikim kapacitetom memorije, ovaj laptop pruža brz odziv i fluidno iskustvo rada.S tanak i moderan dizajn, Aspire 7 nudi ugodno iskustvo rada uz impresivan zaslon visoke rezolucije.Idealan je za produktivnost, kreativne projekte i igre, pružajući svestranost koja odgovara različitim potrebama korisnika.Sa snažnom kombinacijom performansi i dizajna, ACER Aspire 7 je pouzdan partner za one koji traže svestran i efikasan prijenosni računar.',
-    cijena: 'iznad500',
-    kategorija: 'laptopi',
+    category: 'laptopi',
   },
   {
     id: 4,
@@ -38,8 +35,7 @@ const products: IProduct[] = [
     image: 'https://i.imgur.com/FT4Ltdj.jpg',
     description:
       'Doživite revoluciju u gamingu s PlayStation 5, vrhunskom igraćom konzolom koja podiže iskustvo igranja na potpuno novu razinu. PlayStation 5 donosi nevjerojatnu grafiku u 4K rezoluciji, brzi SSD za gotovo trenutačno učitavanje igara, te revolucionarni DualSense kontroler koji pruža senzacionalan taktički doživljaj igre. S bogatstvom ekskluzivnih naslova i podrškom za VR iskustva, PS5 je centar vrhunske zabave. Uživajte u realističnom gamingu, besprijekornom performansama i inovativnim značajkama koje čine PlayStation 5 nezaobilaznom igraćom konzolom za ljubitelje videoigara širom svijeta. Osvježite svoje iskustvo igranja s najnovijom tehnologijom uz PlayStation 5.',
-    cijena: 'iznad500',
-    kategorija: 'konzole',
+    category: 'konzole',
   },
   {
     id: 5,
@@ -48,8 +44,7 @@ const products: IProduct[] = [
     image: 'https://i.imgur.com/yKpyPz0.png',
     description:
       "Baldur's Gate 3, epicentar avanture u svijetu Dungeons & Dragons, pruža nevjerojatno duboko iskustvo uloge u kojem se igrači upuštaju u epsko putovanje prepuno tajni, izazova i fantastičnih bića. Razvijen od strane Larian Studios, igra oživljava bogatstvo D&D svemira uz spektakularnu grafiku, duboke narativne krivulje i inovativan sustav odlučivanja koji oblikuje priču prema igračevim akcijama. S uvjerljivim likovima, bogatim okolinama i taktičkim borbenim sustavom, Baldur's Gate 3 je nezaobilazno iskustvo za ljubitelje RPG igara, pružajući im priliku da istraže opasnosti i misterije ove izvanredne fantazijske avanture.",
-    cijena: '50do199',
-    kategorija: 'videoigre',
+    category: 'videoigre',
   },
   {
     id: 6,
@@ -57,8 +52,7 @@ const products: IProduct[] = [
     price: 218.99,
     image: 'https://i.imgur.com/1wGjewp.jpg',
     description: 'This is the Huawei P Smart 2021.',
-    cijena: '200do499',
-    kategorija: 'mobiteli',
+    category: 'mobiteli',
   },
   {
     id: 7,
@@ -66,8 +60,7 @@ const products: IProduct[] = [
     price: 519.99,
     image: 'https://i.imgur.com/58jiTOb.jpg',
     description: 'This is the Lenovo IdeaPad 3.',
-    cijena: 'iznad500',
-    kategorija: 'laptopi',
+    category: 'laptopi',
   },
   {
     id: 8,
@@ -75,8 +68,7 @@ const products: IProduct[] = [
     price: 449.9,
     image: 'https://i.imgur.com/oEXTOPj.jpg',
     description: 'This is the HP 250 G8.',
-    cijena: '200do499',
-    kategorija: 'laptopi',
+    category: 'laptopi',
   },
   {
     id: 9,
@@ -84,8 +76,7 @@ const products: IProduct[] = [
     price: 494.0,
     image: 'https://i.imgur.com/UXL6DIj.jpg',
     description: 'This is the ASUS X540',
-    cijena: '200do499',
-    kategorija: 'laptopi',
+    category: 'laptopi',
   },
   {
     id: 10,
@@ -93,8 +84,7 @@ const products: IProduct[] = [
     price: 389.99,
     image: 'https://i.imgur.com/LMufbPC.jpg',
     description: 'This is Samsung Galaxy A34.',
-    cijena: '200do499',
-    kategorija: 'mobiteli',
+    category: 'mobiteli',
   },
   {
     id: 11,
@@ -102,8 +92,7 @@ const products: IProduct[] = [
     price: 549.99,
     image: 'https://i.imgur.com/ogJnD8F.png',
     description: "This is 43' Samsung TV 43CU.",
-    cijena: 'iznad500',
-    kategorija: 'televizori',
+    category: 'televizori',
   },
   {
     id: 12,
@@ -111,8 +100,7 @@ const products: IProduct[] = [
     price: 49.99,
     image: 'https://i.imgur.com/gLyOWit.jpg',
     description: 'This is HP DeskJet 2710e.',
-    cijena: '50do199',
-    kategorija: 'printeri',
+    category: 'printeri',
   },
   {
     id: 13,
@@ -120,8 +108,7 @@ const products: IProduct[] = [
     price: 15.99,
     image: 'https://i.imgur.com/pqN63IR.jpg',
     description: 'This is HP 305 Black ink.',
-    cijena: 'do49',
-    kategorija: 'printeri',
+    category: 'printeri',
   },
   {
     id: 14,
@@ -129,8 +116,7 @@ const products: IProduct[] = [
     price: 56.99,
     image: 'https://i.imgur.com/DaUOHPZ.jpg',
     description: 'This is the Razer Ornata keyboard.',
-    cijena: '50do199',
-    kategorija: 'tipkovnice',
+    category: 'tipkovnice',
   },
   {
     id: 15,
@@ -138,8 +124,7 @@ const products: IProduct[] = [
     price: 37.99,
     image: 'https://i.imgur.com/G0EITkg.jpg',
     description: 'This is the Razer DeathAdder mouse.',
-    cijena: 'do49',
-    kategorija: 'tipkovnice',
+    category: 'tipkovnice',
   },
   {
     id: 16,
@@ -147,8 +132,7 @@ const products: IProduct[] = [
     price: 5.99,
     image: 'https://i.imgur.com/oM4Gitc.jpg',
     description: 'This is the USB Kingston 64GB.',
-    cijena: 'do49',
-    kategorija: 'pohrana',
+    category: 'pohrana',
   },
   {
     id: 17,
@@ -156,8 +140,7 @@ const products: IProduct[] = [
     price: 69.99,
     image: 'https://i.imgur.com/pSFQxDI.png',
     description: 'This is the PS5 Dualsense Controller.',
-    cijena: '50do199',
-    kategorija: 'konzole',
+    category: 'konzole',
   },
   {
     id: 18,
@@ -165,8 +148,7 @@ const products: IProduct[] = [
     price: 79.99,
     image: 'https://i.imgur.com/0EG2wrH.jpg',
     description: 'This is the ASUS 4G Router.',
-    cijena: '50do199',
-    kategorija: 'mreznaoprema',
+    category: 'mreznaoprema',
   },
   {
     id: 19,
@@ -174,8 +156,7 @@ const products: IProduct[] = [
     price: 369.99,
     image: 'https://i.imgur.com/NAaHK0U.jpg',
     description: 'This is the Nintendo Switch.',
-    cijena: '200do499',
-    kategorija: 'konzole',
+    category: 'konzole',
   },
   {
     id: 20,
@@ -183,8 +164,7 @@ const products: IProduct[] = [
     price: 69.99,
     image: 'https://i.imgur.com/jOm43U4.png',
     description: 'This is the videogame The Last of Us for the PS5.',
-    cijena: '50do199',
-    kategorija: 'videoigre',
+    category: 'videoigre',
   },
 ]
 
