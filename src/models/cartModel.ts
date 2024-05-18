@@ -1,32 +1,15 @@
+import Kosarica from '../entities/Kosarica'
 import ICart from './interfaces/cartInterface'
 import ICartProduct from './interfaces/cartProductInterface'
 
-class Cart implements ICart {
-  constructor() {
-    this.id = 0
-    this.products = []
-    this.total = 0
-    this.discountedTotal = 0
-    this.userId = 0
-    this.totalProducts = 0
-    this.totalQuantity = 0
+class Cart extends Kosarica {
+  public get products() {
+    return this.proizvodKupacs.map((pk) => {
+      const product = pk.proizvod
+      product.updateQuantityAndPrice(pk.kolicina, pk.cijena)
+      return product
+    })
   }
-
-  id: number
-
-  products: ICartProduct[]
-
-  total: number
-
-  discountedTotal: number
-
-  userId: number
-
-  totalProducts: number
-
-  totalQuantity: number
 }
 
-export default new Cart()
-
-// exportamo new UserCart() jer želimo da nam vrati objekt a ne klasu
+export default Cart

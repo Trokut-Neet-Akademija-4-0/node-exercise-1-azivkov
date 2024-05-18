@@ -1,109 +1,158 @@
 import productService from './productService'
-import Cart from '../models/cartModel'
-import ICart from '../models/interfaces/cartInterface'
-import CartProduct from '../models/cartProductModel'
 import HttpError from '../utils/HttpError'
+import Kosarica from '../entities/Kosarica'
+import Kupac from '../entities/Kupac'
+import ProizvodKupac from '../entities/ProizvodKupac'
+import Proizvod from '../entities/Proizvod'
+import CartProductAddRequest from '../models/request/cartProductAddRequest'
+import CartBuyerInformationRequest from '../models/request/cartBuyerInformationRequest'
 
+// Cart servis gdje nam se nalazi cila nasa poslovna logika vezana za kosaricu
 class CartService {
-  private cart: ICart = Cart
-
-  getCart(): ICart {
-    return this.cart
-  }
-
-  addProductById(id: number): ICart {
-    this.changeProductQuantity(id, 1)
-    this.updateCartInformation()
-    return this.cart
-  }
-
-  removeProductById(id: number): ICart {
-    this.changeProductQuantity(id, -1)
-    this.updateCartInformation()
-    return this.cart
-  }
-
-  deleteProductById(id: number): ICart {
-    const indexToDelete = this.getCartProductIndexByProductId(id)
-
-    if (indexToDelete < 0)
-      throw new HttpError(404, `Cart product with id ${id} not found`)
-
-    if (indexToDelete >= 0) {
-      this.cart.products.splice(indexToDelete, 1)
-    }
-
-    return this.cart
-  }
-
-  changeProductQuantity(productId: number, quantityModifier: number): void {
-    const product = productService.getProductById(productId)
-
-    try {
-      const existingCartProduct = this.getCartProductByProductId(product.id)
-      if (existingCartProduct.quantity + quantityModifier > 0)
-        existingCartProduct.quantity += quantityModifier
-      else this.deleteProductById(product.id)
-    } catch (error) {
-      if (error instanceof HttpError)
-        this.cart.products.push(
-          new CartProduct(
-            this.getNextAvailableCartProductId(),
-            product,
-            quantityModifier,
-          ),
-        )
-    }
-  }
-
-  getCartProductByProductId(id: number): CartProduct {
-    const foundCartProduct = this.cart.products.find(
-      (cartProduct) => cartProduct.product.id === id,
-    )
-    if (!foundCartProduct)
-      throw new HttpError(404, `Cart product with product id ${id} not found`)
-    return foundCartProduct
-  }
-
-  getCartProductIndexByProductId(id: number): number {
-    const cartProductIndex = this.cart.products.findIndex(
-      (cartProduct) => cartProduct.product.id === id,
-    )
-    if (cartProductIndex < 0)
-      throw new HttpError(404, `Cart product with product id ${id} not found`)
-    return cartProductIndex
-  }
-
-  getNextAvailableCartProductId(): number {
-    let greatestId = 0
-    this.cart.products.forEach((cartProduct) => {
-      greatestId = cartProduct.id > greatestId ? cartProduct.id : greatestId
-    })
-    return greatestId + 1
-  }
-
-  updateCartInformation() {
-    let totalQuantity = 0
-    let total = 0
-    // let totalDiscounted = 0
-    this.cart.products.forEach((cartProduct) => {
-      const totalProductPrice = cartProduct.quantity * cartProduct.product.price
-      total += totalProductPrice
-      // totalDiscounted += totalProductPrice * (cartProduct.product.discountPercentage / 100)
-      totalQuantity += cartProduct.quantity
+  async getCart(): Promise<Kosarica> {
+    let nonProcessedCart = await Kosarica.findOne({
+      relations: ['kupac', 'proizvodKupacs', 'proizvodKupacs.proizvod'],
+      where: {
+        obradjeno: false,
+      },
     })
 
-    //moj json nema discount, ali ovako bi se pisalo totalDiscounted da je u postotcima ^
-
-    this.cart.totalProducts = this.cart.products.length
-    this.cart.total = total
-    this.cart.totalQuantity = totalQuantity
+    if (!nonProcessedCart) {
+      nonProcessedCart = new Kosarica()
+      nonProcessedCart = await nonProcessedCart.save()
+    }
+    return nonProcessedCart
   }
 
-  clearCart(): ICart {
-    this.cart.products = []
-    this.updateCartInformation()
-    return this.cart
+  async getCartById(cartId: number): Promise<Kosarica> {
+    const foundCart = await Kosarica.findOne({
+      relations: ['kupac', 'proizvodKupacs', 'proizvodKupacs.proizvod'],
+      where: {
+        id: cartId,
+      },
+    })
+
+    if (!foundCart) throw new HttpError(404, `Cart with id ${cartId} not found`)
+    return foundCart
+  }
+
+  // dodavanje produkta u kosaricu pomocu produkt id-a, uvijek uveca produkt za 1
+  async addProductById(
+    cartId: number,
+    productId: number,
+    cartProductAddRequest: CartProductAddRequest,
+  ): Promise<Kosarica> {
+    const cart = await this.getCartById(cartId)
+    const product = await productService.getProductById(productId)
+
+    this.checkIsQuantityValid(product, cartProductAddRequest.quantity)
+
+    const existingProductInCart = cart.proizvodKupacs.find(
+      (pk) => pk.proizvod.id === productId,
+    )
+
+    if (existingProductInCart) {
+      existingProductInCart.kolicina += cartProductAddRequest.quantity
+      await existingProductInCart.save()
+    } else {
+      const cartProduct = ProizvodKupac.CreateCartProduct(
+        cart,
+        product,
+        cartProductAddRequest.quantity,
+      )
+      await cartProduct.save()
+    }
+
+    return this.getCartById(cartId)
+  }
+
+  async updateProductQuantity(
+    cartId: number,
+    productId: number,
+    cartProductAddRequest: CartProductAddRequest,
+  ): Promise<Kosarica> {
+    const cart = await this.getCartById(cartId)
+    const product = await productService.getProductById(productId)
+
+    this.checkIsQuantityValid(product, cartProductAddRequest.quantity)
+
+    const existingProductInCart = cart.proizvodKupacs.find(
+      (pk) => pk.proizvod.id === productId,
+    )
+
+    if (existingProductInCart) {
+      existingProductInCart.kolicina = cartProductAddRequest.quantity
+      await existingProductInCart.save()
+    }
+    return cart
+  }
+
+  async removeProductFromCart(
+    cartId: number,
+    productId: number,
+  ): Promise<Kosarica> {
+    const cart = await this.getCartById(cartId)
+
+    const existingProductInCart = cart.proizvodKupacs.find(
+      (pk) => pk.proizvod.id === productId,
+    )
+
+    if (existingProductInCart) {
+      await existingProductInCart.remove()
+    }
+    return this.getCartById(cartId)
+  }
+
+  checkIsQuantityValid(product: Proizvod, quantity: number): void {
+    if (!product.kolicina || product.kolicina < quantity)
+      throw new HttpError(
+        404,
+        `request quantity ${quantity} is larger then available product quantity(${product.kolicina})`,
+      )
+  }
+
+  // async purchaseCartById(
+  //   cartId: number,
+  //   buyerInformation: CartBuyerInformationRequest,
+  // ): Promise<Kosarica> {
+  //   const cart = await this.getCartById(cartId)
+  //   if (cart.obradjeno) {
+  //     throw new HttpError(500, `Cart with id ${cartId} already processed`)
+  //   }
+  //   let dostava: Kupac | null = null
+  //   if (buyerInformation.dostava) {
+  //     dostava = await Kupac.CreateKupacFromBuyerInformation(
+  //       buyerInformation.dostava,
+  //     )
+  //   }
+  //   const kupac = await Kupac.CreateKupacFromBuyerInformation(
+  //     buyerInformation.kupac,
+  //   )
+  //   if (dostava) {
+  //     kupac.kupacDostava = dostava
+  //     await kupac.save()
+  //   }
+  //   cart.kupac = kupac
+  //   cart.obradjeno = true
+  //   if (!cart.racun) {
+  //     const racun = new Racun()
+  //     racun.idUplate = randomUUID()
+  //     racun.jir = randomUUID()
+  //     racun.nacinPlacanja = 'CASH'
+  //     racun.total = cart.total
+  //     await racun.save()
+  //     cart.racun = racun
+  //   }
+  //   await cart.save()
+  //   return this.getCartById(cartId)
+  // }
+
+  async clearCart(cartId: number): Promise<Kosarica> {
+    let cart = await this.getCartById(cartId)
+    await ProizvodKupac.remove(cart.proizvodKupacs)
+    cart = await this.getCartById(cartId)
+    await cart.UpdateTotal()
+    return cart
   }
 }
 

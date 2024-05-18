@@ -4,16 +4,22 @@ import {
   getProductById,
   deleteProductById,
   createProduct,
+  updateProductById,
+  getAllCategories,
 } from '../controllers/productController'
 
 const router = express.Router()
 
 router.get('/', getAllProducts)
 
+router.get('/categories', getAllCategories)
+
 router.get('/:id', getProductById)
 
-router.get('/remove/:id', deleteProductById)
+router.delete('/:id', deleteProductById)
 
 router.post('/', createProduct)
+
+router.put('/:id', updateProductById)
 
 export default router
