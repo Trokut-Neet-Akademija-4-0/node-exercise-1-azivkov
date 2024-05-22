@@ -1,9 +1,11 @@
 export default class AddressInformation {
-  public adresa!: string
+  public ulica!: string
 
-  public napomenaZaDostavu!: string
+  public broj!: string
 
-  public postanskiBroj!: number
+  public napomenaDostavljacu!: string
+
+  public postanskiBroj!: string
 
   public grad!: string
 

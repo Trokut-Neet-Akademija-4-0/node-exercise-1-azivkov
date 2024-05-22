@@ -3,6 +3,7 @@ import Proizvod from '../entities/Proizvod'
 import IProduct from '../models/interfaces/productInterface'
 import products from '../models/productModel'
 import HttpError from '../utils/HttpError'
+import ProductResponse from '../models/response/ProductResponse'
 
 class ProductService {
   private products: IProduct[] = products

@@ -6,6 +6,10 @@ import ProizvodKupac from '../entities/ProizvodKupac'
 import Proizvod from '../entities/Proizvod'
 import CartProductAddRequest from '../models/request/cartProductAddRequest'
 import CartBuyerInformationRequest from '../models/request/cartBuyerInformationRequest'
+import CartResponse from '../models/response/CartResponse'
+import Racun from '../entities/Racun'
+import NacinPlacanja from '../entities/NacinPlacanja'
+import { randomUUID } from 'crypto'
 
 // Cart servis gdje nam se nalazi cila nasa poslovna logika vezana za kosaricu
 class CartService {
@@ -22,6 +26,10 @@ class CartService {
       nonProcessedCart = await nonProcessedCart.save()
     }
     return nonProcessedCart
+  }
+
+  async getCartResponseById(cartId: number): Promise<CartResponse> {
+    return (await this.getCartById(cartId)).toCartResponse()
   }
 
   async getCartById(cartId: number): Promise<Kosarica> {
@@ -111,42 +119,41 @@ class CartService {
       )
   }
 
-  // async purchaseCartById(
-  //   cartId: number,
-  //   buyerInformation: CartBuyerInformationRequest,
-  // ): Promise<Kosarica> {
-  //   const cart = await this.getCartById(cartId)
-  //   if (cart.obradjeno) {
-  //     throw new HttpError(500, `Cart with id ${cartId} already processed`)
-  //   }
-  //   let dostava: Kupac | null = null
-  //   if (buyerInformation.dostava) {
-  //     dostava = await Kupac.CreateKupacFromBuyerInformation(
-  //       buyerInformation.dostava,
-  //     )
-  //   }
-  //   const kupac = await Kupac.CreateKupacFromBuyerInformation(
-  //     buyerInformation.kupac,
-  //   )
-  //   if (dostava) {
-  //     kupac.kupacDostava = dostava
-  //     await kupac.save()
-  //   }
-  //   cart.kupac = kupac
-  //   cart.obradjeno = true
-  //   if (!cart.racun) {
-  //     const racun = new Racun()
-  //     racun.idUplate = randomUUID()
-  //     racun.jir = randomUUID()
-  //     racun.nacinPlacanja = 'CASH'
-  //     racun.total = cart.total
-  //     await racun.save()
-  //     cart.racun = racun
-  //   }
-  //   await cart.save()
-  //   return this.getCartById(cartId)
-  // }
-
+  async purchaseCartById(
+    cartId: number,
+    buyerInformation: CartBuyerInformationRequest,
+  ): Promise<Kosarica> {
+    const cart = await this.getCartById(cartId)
+    if (cart.obradjeno) {
+      throw new HttpError(500, `Cart with id ${cartId} already processed`)
+    }
+    let dostava: Kupac | null = null
+    if (buyerInformation.dostava) {
+      dostava = await Kupac.CreateKupacFromBuyerInformation(
+        buyerInformation.dostava,
+      )
+    }
+    const kupac = await Kupac.CreateKupacFromBuyerInformation(
+      buyerInformation.kupac,
+    )
+    if (dostava) {
+      kupac.kupacDostava = dostava
+      await kupac.save()
+    }
+    cart.kupac = kupac
+    cart.obradjeno = true
+    if (!cart.racun) {
+      const racun = new Racun()
+      racun.idUplate = randomUUID()
+      racun.jir = randomUUID()
+      racun.nacinPlacanja = new NacinPlacanja()
+      racun.total = cart.total
+      await racun.save()
+      cart.racun = racun
+    }
+    await cart.save()
+    return this.getCartById(cartId)
+  }
   async clearCart(cartId: number): Promise<Kosarica> {
     let cart = await this.getCartById(cartId)
     await ProizvodKupac.remove(cart.proizvodKupacs)

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import {
   BaseEntity,
   Column,
@@ -15,20 +16,27 @@ import AddressInformation from '../models/addressInformation'
 @Index('Adresa_pkey', ['id'], { unique: true })
 @Entity('Adresa', { schema: 'public' })
 export default class Adresa extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'integer', name: 'adresa_id' })
   id!: number
 
-  @Column('character varying', { name: 'adresa', nullable: true, length: 1024 })
-  adresa!: string | null
+  @Column('character varying', { name: 'ulica', nullable: true, length: 255 })
+  ulica!: string | null
 
-  @Column('character varying', { name: 'napomena_za_dostavu', nullable: true })
-  napomenaZaDostavu!: string | null
+  @Column('character varying', { name: 'broj', nullable: true, length: 32 })
+  broj!: string | null
 
-  @ManyToOne(() => Grad, (grad) => grad.adresas)
+  @Column('character varying', {
+    name: 'napomena_dostavljacu',
+    nullable: true,
+    length: 255,
+  })
+  napomenaDostavljacu!: string | null
+
+  @ManyToOne(() => Grad, (grad: Grad) => grad.adresas)
   @JoinColumn([{ name: 'grad_id', referencedColumnName: 'id' }])
   grad!: Grad
 
-  @OneToMany(() => Kupac, (kupac) => kupac.adresa)
+  @OneToMany(() => Kupac, (kupac: Kupac) => kupac.adresa)
   kupacs!: Kupac[]
 
   public static async GetExistingAddressFromAddressInformation(
@@ -38,8 +46,9 @@ export default class Adresa extends BaseEntity {
     if (!grad) return null
     return Adresa.findOne({
       where: {
-        adresa: address.adresa,
-        napomenaZaDostavu: address.napomenaZaDostavu,
+        broj: address.broj,
+        napomenaDostavljacu: address.napomenaDostavljacu,
+        ulica: address.ulica,
         grad,
       },
     })
@@ -54,8 +63,9 @@ export default class Adresa extends BaseEntity {
       await grad.save()
     }
     const adresa = new Adresa()
-    adresa.adresa = address.adresa
-    adresa.napomenaZaDostavu = address.napomenaZaDostavu
+    adresa.broj = address.broj
+    adresa.napomenaDostavljacu = address.napomenaDostavljacu
+    adresa.ulica = address.ulica
     adresa.grad = grad
     return adresa.save()
   }

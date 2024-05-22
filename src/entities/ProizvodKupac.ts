@@ -9,6 +9,8 @@ import {
 import Kosarica from './Kosarica'
 import Kupac from './Kupac'
 import Proizvod from './Proizvod'
+import StringToFloatTransformer from '../utils/stringToFloatTransformer'
+import ProductResponse from '../models/response/ProductResponse'
 
 @Index('ProizvodKupac_pkey', ['kupacId', 'proizvodId'], { unique: true })
 @Entity('ProizvodKupac', { schema: 'public' })
@@ -19,7 +21,12 @@ export default class ProizvodKupac extends BaseEntity {
   @Column('integer', { primary: true, name: 'kupac_id' })
   kupacId!: number
 
-  @Column('numeric', { name: 'cijena', precision: 10, scale: 2 })
+  @Column('numeric', {
+    name: 'cijena',
+    precision: 10,
+    scale: 2,
+    transformer: new StringToFloatTransformer(),
+  })
   cijena!: number
 
   @Column('integer', { name: 'kolicina' })
@@ -34,7 +41,7 @@ export default class ProizvodKupac extends BaseEntity {
   kupac!: Kupac
 
   @ManyToOne(() => Proizvod, (proizvod) => proizvod.proizvodKupacs)
-  @JoinColumn([{ name: 'proizvod_id', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: 'id', referencedColumnName: 'id' }])
   proizvod!: Proizvod
 
   public static CreateCartProduct(
@@ -49,5 +56,12 @@ export default class ProizvodKupac extends BaseEntity {
     pk.proizvod = product
     if (cart.kupac) pk.kupac = cart.kupac
     return pk
+  }
+
+  toCartProductsResponse(): ProductResponse {
+    const productResponse = this.proizvod.toProductResponse()
+    productResponse.quantity = this.kolicina
+    productResponse.price = this.cijena
+    return productResponse
   }
 }

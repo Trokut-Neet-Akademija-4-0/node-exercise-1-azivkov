@@ -16,7 +16,7 @@ export default class Grad extends BaseEntity {
   id!: number
 
   @Column('integer', { name: 'postanski_broj', nullable: true })
-  postanskiBroj!: number | null
+  postanskiBroj!: string | null
 
   @Column('character varying', { name: 'drzava', nullable: true, length: 256 })
   drzava!: string | null
