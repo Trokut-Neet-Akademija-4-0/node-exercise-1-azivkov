@@ -3,13 +3,8 @@ import userService from '../services/userService'
 
 const router = express.Router()
 
-router.get('/users', (req: Request, res: Response) => {
-  const users = userService.getAllUsers()
-  res.send(users)
-})
-
-router.get('/users/:id', (req: Request, res: Response) => {
-  const userId = req.params.id
+router.get('/:id', (req: Request, res: Response) => {
+  const userId = Number.parseInt(req.params.id, 10)
   const user = userService.getUserById(userId)
   if (user) {
     res.send(user)
